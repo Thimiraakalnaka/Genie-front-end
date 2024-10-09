@@ -12,6 +12,8 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import PeopleIcon from '@mui/icons-material/People';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import Orders from '../Layouts/Orders';
+import Users from '../Layouts/Users';
 
 const NAVIGATION = [
   {
@@ -86,7 +88,17 @@ const demoTheme = createTheme({
 });
 
 function DemoPageContent({ pathname }) {
-  return (
+  
+    switch(pathname){
+      case '/dashboard':
+        return <Dashboard pathname={pathname}/>;
+        case '/orders':
+          return <Orders/>;
+          case '/users':
+            return <Users/>;
+
+          default:
+            return(
     <Box
       sx={{
         py: 4,
@@ -96,9 +108,11 @@ function DemoPageContent({ pathname }) {
         textAlign: 'center',
       }}
     >
+      
       <Typography>Dashboard content for {pathname}</Typography>
     </Box>
   );
+}
 }
 
 DemoPageContent.propTypes = {
