@@ -1,162 +1,97 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import DescriptionIcon from '@mui/icons-material/Description';
-import LayersIcon from '@mui/icons-material/Layers';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import PeopleIcon from '@mui/icons-material/People';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Typography, Box, CssBaseline, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import GroupIcon from '@mui/icons-material/Group';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import CategoryIcon from '@mui/icons-material/Category';
+import SellIcon from '@mui/icons-material/Sell';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Users from '../Layouts/Users'; 
 import Orders from '../Layouts/Orders';
-import Users from '../Layouts/Users';
 
-const NAVIGATION = [
-  {
-    kind: 'header',
-    title: 'Main items',
-  },
-  {
-    segment: 'dashboard',
-    title: 'Dashboard',
-    icon: <DashboardIcon />,
-  },
-  {
-    segment: 'orders',
-    title: 'Orders',
-    icon: <ShoppingCartIcon />,
-  },
-  {
-    segment: 'users',
-    title: 'Users',
-    icon: <PeopleIcon />,
-  },
-  {
-    segment: 'products',
-    title: 'Products',
-    icon: <InventoryIcon />,
-  },
-  {
-    kind: 'divider',
-  },
-  {
-    kind: 'header',
-    title: 'Analytics',
-  },
-  {
-    segment: 'reports',
-    title: 'Reports',
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: 'sales',
-        title: 'Sales',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'traffic',
-        title: 'Traffic',
-        icon: <DescriptionIcon />,
-      },
-    ],
-  },
-  {
-    segment: 'integrations',
-    title: 'Integrations',
-    icon: <LayersIcon />,
-  },
-];
 
 const demoTheme = createTheme({
-  cssVariables: {
-    colorSchemeSelector: 'data-toolpad-color-scheme',
+  palette: {
+    mode: 'light',
   },
-  colorSchemes: { light: true, dark: true },
   breakpoints: {
     values: {
       xs: 0,
       sm: 600,
-      md: 600,
+      md: 900,
       lg: 1200,
       xl: 1536,
     },
   },
 });
 
-function DemoPageContent({ pathname }) {
-  
-    switch(pathname){
-      case '/dashboard':
-        return <Dashboard pathname={pathname}/>;
-        case '/orders':
-          return <Orders/>;
-          case '/users':
-            return <Users/>;
 
-          default:
-            return(
-    <Box
-      sx={{
-        py: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-      }}
-    >
-      
-      <Typography>Dashboard content for {pathname}</Typography>
-    </Box>
-  );
-}
-}
+const NAVIGATION = [
+  { title: 'Users', icon: <GroupIcon />, component: <Users /> },
+  { title: 'Orders', icon: <InventoryIcon />, component: <Orders /> },
+  { title: 'Product', icon: <SellIcon />, component: <Typography>Product Component</Typography> },
+  { title: 'Category', icon: <CategoryIcon />, component: <Typography>Category Component</Typography> },
+];
 
-DemoPageContent.propTypes = {
-  pathname: PropTypes.string.isRequired,
-};
+const drawerWidth = 240;
 
-function Dashboard(props) {
-  const { window } = props;
-
-  const [pathname, setPathname] = React.useState('/dashboard');
-
-  const router = React.useMemo(() => {
-    return {
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path) => setPathname(String(path)),
-    };
-  }, [pathname]);
-
-  // Remove this const when copying and pasting into your project.
-  const demoWindow = window !== undefined ? window() : undefined;
+export default function Dashboard() {
+  const [selectedComponent, setSelectedComponent] = useState(<Typography>Welcome to the admin dashboard!</Typography>);
 
   return (
-    // preview-start
-    <AppProvider
-      navigation={NAVIGATION}
-      router={router}
-      theme={demoTheme}
-      window={demoWindow}
-    >
-      <DashboardLayout>
-        <DemoPageContent pathname={pathname} />
-      </DashboardLayout>
-    </AppProvider>
-    // preview-end
+    <ThemeProvider theme={demoTheme}>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        
+        
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+          <Toolbar>
+            <Typography variant="h6" noWrap component="div">
+              Admin Dashboard
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
+        
+        <Drawer
+          variant="permanent"
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+          }}
+        >
+          <Toolbar />
+          <Box sx={{ overflow: 'auto' }}>
+            <List>
+              {NAVIGATION.map((item, index) => (
+                <ListItem
+                  button
+                  key={item.title}
+                  onClick={() => setSelectedComponent(item.component)} 
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.title} />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Drawer>
+
+        
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            bgcolor: 'background.default',
+            p: 3,
+            ml: '5px',
+          }}
+        >
+          <Toolbar />
+          
+          {selectedComponent}
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
-
-Dashboard.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * Remove this when copying and pasting into your project.
-   */
-  window: PropTypes.func,
-};
-
-export default Dashboard;

@@ -1,11 +1,15 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Dashboard from './Pages/Dashboard';
 
 function App() {
   return (
-    <div className="App">
-      <Dashboard/>
-    </div>
+    <BrowserRouter>
+    <Routes>
+      <Route path='/' element={<Dashboard/>}/>
+    </Routes>
+    </BrowserRouter>
+    
   );
 }
 
