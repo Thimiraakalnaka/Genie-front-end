@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Modal, TextField, Button } from '@mui/material';
 
-const UserForm = ({ addUser, open, handleClose }) => {
+const UserForm = ({ addUser, open, handleClose, submitted, data, isEdit, updateUser }) => {
+
 
     const [formData, setFormData] = useState({
         id: '',
@@ -10,6 +11,25 @@ const UserForm = ({ addUser, open, handleClose }) => {
         email: '',
         password: ''
       });
+
+      useEffect(() => {
+        if(!submitted && !isEdit){
+            setFormData({
+                id: '',
+                firstname: '',
+                lastname: '',
+                email: '',
+                password: ''
+              });
+        }
+    }, [submitted, isEdit]);
+
+
+    useEffect(() => {
+        if(data?.id && data.id !==0){
+            setFormData(data)
+        }
+    },[data]);
     
       const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,9 +38,12 @@ const UserForm = ({ addUser, open, handleClose }) => {
     
       const handleSubmit = (e) => {
         e.preventDefault();
-        addUser(formData);
-        // You can handle form submission here (e.g., make an API call)
-        handleClose();
+        if(isEdit){
+            updateUser(formData);
+        }else{
+            addUser(formData);
+        }  
+        
       };
 
   return (
@@ -50,7 +73,9 @@ const UserForm = ({ addUser, open, handleClose }) => {
         }}
       >
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          Add New User
+          {
+            isEdit? 'Update User' : 'Add New User'
+          }
         </Typography>
         <TextField
           label="ID"
@@ -90,7 +115,9 @@ const UserForm = ({ addUser, open, handleClose }) => {
           fullWidth
         />
         <Button variant="contained" type="submit">
-          Submit
+          {
+            isEdit ? 'Update' : 'Add'
+          }
         </Button>
       </Box>
       </Modal>

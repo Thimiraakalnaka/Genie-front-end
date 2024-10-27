@@ -3,7 +3,7 @@ import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
-const UsersTable = ({rows}) => {
+const UsersTable = ({rows, selectedUser, deleteUser}) => {
   return (
     <div>
       <TableContainer component={Paper}>
@@ -27,8 +27,22 @@ const UsersTable = ({rows}) => {
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.password}</TableCell>
                 <TableCell>
-                <Button sx={{margin:'0px 10px'}} variant="outlined" startIcon={<DeleteIcon />} color='error'>Delete</Button>
-                <Button sx={{margin:'0px 10px'}} variant="contained" color="success">Update</Button>
+                <Button sx={{margin:'0px 10px'}} 
+                variant="outlined" 
+                startIcon={<DeleteIcon />} 
+                color='error'
+                onClick={() => deleteUser({id:row.id})}
+                >
+                    Delete
+                    </Button>
+
+                <Button sx={{margin:'0px 10px'}} 
+                variant="contained" 
+                color="success"
+                onClick={() => selectedUser({id: row.id, firstname:row.firstname, lastname:row.lastname, email:row.email, password:row.password})}
+                >Update
+                </Button>
+
                 </TableCell>
               </TableRow>
             ))}

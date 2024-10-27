@@ -9,6 +9,8 @@ import UserForm from '../Component/UserForm';
 export default function Users() {
   const [users, setUsers]= useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [selectedUser, setSelectedUser]= useState([]);
   
   useEffect(() =>{
     getUsers();
@@ -39,15 +41,64 @@ export default function Users() {
     .then(() => {
       getUsers();
       setSubmitted(false);
+      handleClose();
     })
     .catch(error => {
       console.error("Axios Error :", error);
     });
   }
 
+  const updateUser = (data) => {
+    setSubmitted(true);
+
+    const payload ={
+      id: data.id,
+      firstname: data.firstname,
+      lastname: data.lastname,
+      email: data.email,
+      password: data.password
+    }
+
+    Axios.put('http://localhost:8080/api/v1/updateuser', payload)
+    .then(() => {
+      getUsers();
+      setSubmitted(false);
+      handleClose();
+    })
+    .catch(error => {
+      console.error("Axios Error :", error);
+    });
+
+  }
+
+  const deleteUser = (data)=>{
+
+    const payload ={
+      id: data.id,
+      firstname: data.firstname,
+      lastname: data.lastname,
+      email: data.email,
+      password: data.password
+    }
+    
+    Axios.delete('http://localhost:8080/api/v1/deleteuser', {data:payload})
+    .then(() => {
+      getUsers();
+    })
+    .catch(error => {
+      console.error("Axios Error deleting user:", error);
+    });
+
+
+  }
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setIsEdit(false);
+    setSelectedUser({});
+  };
 
   return (
     <div>
@@ -56,9 +107,24 @@ export default function Users() {
         <Button sx={{float:'right'}} variant="contained" endIcon={<PersonAddAltIcon />} onClick={handleOpen}> Add users</Button>
        
       </Typography>
-    <UsersTable rows={users}/>
-    <UserForm open={open} handleClose={handleClose} addUser={addUser} />
-      
+    <UsersTable rows={users}  
+    selectedUser={data=>{
+      setSelectedUser(data);
+      setIsEdit(true);
+      handleOpen();
+    }}
+    
+    deleteUser={data => window.confirm('Are you sure?') && deleteUser(data)}/>
+
+    <UserForm 
+    open={open} 
+    handleClose={handleClose} 
+    addUser={addUser} 
+    submitted={submitted} 
+    data={selectedUser} 
+    isEdit={isEdit}
+    updateUser={updateUser}
+    />
     </div>
   );
 }
