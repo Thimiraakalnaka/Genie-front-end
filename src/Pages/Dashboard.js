@@ -7,6 +7,7 @@ import SellIcon from '@mui/icons-material/Sell';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Users from '../Layouts/Users'; 
 import Orders from '../Layouts/Orders';
+import Products from '../Layouts/Products';
 
 
 const demoTheme = createTheme({
@@ -28,7 +29,7 @@ const demoTheme = createTheme({
 const NAVIGATION = [
   { title: 'Users', icon: <GroupIcon />, component: <Users /> },
   { title: 'Orders', icon: <InventoryIcon />, component: <Orders /> },
-  { title: 'Product', icon: <SellIcon />, component: <Typography>Product Component</Typography> },
+  { title: 'Product', icon: <SellIcon />, component: <Products /> },
   { title: 'Category', icon: <CategoryIcon />, component: <Typography>Category Component</Typography> },
 ];
 
