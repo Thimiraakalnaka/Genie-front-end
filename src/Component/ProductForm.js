@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Modal, TextField, Button } from '@mui/material';
 
-const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, updateUser }) => {
+const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, updateProduct }) => {
     
     const [formData, setFormData] = useState({
         productid: '',
@@ -36,7 +36,7 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
       const handleSubmit = (e) => {
         e.preventDefault();
         if(isEdit){
-            updateUser(formData);
+            updateProduct(formData);
         }else{
             addProduct(formData);
         }  

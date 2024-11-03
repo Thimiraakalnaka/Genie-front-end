@@ -2,7 +2,7 @@ import React from 'react';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const ProductsTable = ({rows, selectedUser, deleteUser}) => {
+const ProductsTable = ({rows, selectedProducts, deleteProduct}) => {
   return (
     <div>
       <TableContainer component={Paper}>
@@ -28,7 +28,7 @@ const ProductsTable = ({rows, selectedUser, deleteUser}) => {
                 variant="outlined" 
                 startIcon={<DeleteIcon />} 
                 color='error'
-                onClick={() => deleteUser({id:row.productid})}
+                onClick={() => deleteProduct({productid:row.productid})}
                 >
                     Delete
                     </Button>
@@ -36,7 +36,7 @@ const ProductsTable = ({rows, selectedUser, deleteUser}) => {
                 <Button sx={{margin:'0px 10px'}} 
                 variant="contained" 
                 color="success"
-                onClick={() => selectedUser({id: row.productid, firstname:row.firstname, lastname:row.lastname, email:row.email, password:row.password})}
+                onClick={() => selectedProducts({productid: row.productid, productname:row.productname, description:row.description, quantity:row.quantity})}
                 >Update
                 </Button>
 

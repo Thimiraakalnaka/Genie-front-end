@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import {Button, Typography } from '@mui/material';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ProductForm from '../Component/ProductForm';
 import ProductsTable from '../Component/ProductsTable';
 
@@ -12,10 +12,10 @@ const Products = () => {
     const [selectedProducts, setSelectedProducts]= useState([]);
   
   useEffect(() =>{
-    getUsers();
+    getProducts();
   },[]);
 
-  const getUsers = () =>{
+  const getProducts = () =>{
     Axios.get('http://localhost:8080/api/v1/getproduct')
     .then(response => {
       setProducts(response.data);
@@ -37,7 +37,7 @@ const Products = () => {
 
     Axios.post('http://localhost:8080/api/v1/addproduct', payload)
     .then(() => {
-      getUsers();
+      getProducts();
       setSubmitted(false);
       handleClose();
     })
@@ -46,7 +46,7 @@ const Products = () => {
     });
   }
 
-  const updateUser = (data) => {
+  const updateProduct = (data) => {
     setSubmitted(true);
 
     const payload ={
@@ -56,15 +56,35 @@ const Products = () => {
       quantity: data.quantity
     }
 
-    Axios.put('http://localhost:8080/api/v1/updateuser', payload)
+    Axios.put('http://localhost:8080/api/v1/updateproduct', payload)
     .then(() => {
-      getUsers();
+      getProducts();
       setSubmitted(false);
       handleClose();
     })
     .catch(error => {
       console.error("Axios Error :", error);
     });
+
+  }
+
+  const deleteProduct = (data)=>{
+
+    const payload ={
+      productid: data.productid,
+      productname: data.productname,
+      description: data.description,
+      quantity: data.quantity
+    }
+    
+    Axios.delete('http://localhost:8080/api/v1/deleteproduct', {data:payload})
+    .then(() => {
+      getProducts();
+    })
+    .catch(error => {
+      console.error("Axios Error deleting product:", error);
+    });
+
 
   }
 
@@ -81,7 +101,7 @@ const Products = () => {
     <div>
         <Typography variant="h4" gutterBottom>
         Products
-        <Button sx={{float:'right'}} variant="contained" endIcon={<PersonAddAltIcon />} onClick={handleOpen}> Add Product</Button>
+        <Button sx={{float:'right'}} variant="contained" endIcon={<AddCircleOutlineIcon />} onClick={handleOpen}> Add Product</Button>
        
       </Typography>
     <ProductsTable rows={products}  
@@ -91,7 +111,7 @@ const Products = () => {
       handleOpen();
     }}
     
-    // deleteUser={data => window.confirm('Are you sure?') && deleteUser(data)}
+    deleteProduct={data => window.confirm('Are you sure?') && deleteProduct(data)}
     />
 
     <ProductForm 
@@ -101,7 +121,7 @@ const Products = () => {
     submitted={submitted} 
     data={selectedProducts} 
     isEdit={isEdit}
-    updateUser={updateUser}
+    updateProduct={updateProduct}
     />
     </div>
   )
