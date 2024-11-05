@@ -29,7 +29,6 @@ const Products = () => {
     setSubmitted(true);
 
     const payload ={
-        productid: data.productid,
         productname: data.productname,
         description: data.description,
         quantity: data.quantity
