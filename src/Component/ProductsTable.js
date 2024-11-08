@@ -11,7 +11,10 @@ const ProductsTable = ({rows, selectedProducts, deleteProduct}) => {
             <TableRow>
               <TableCell>Product ID</TableCell>
               <TableCell>Product Name</TableCell>
+              <TableCell>Brand</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Catergory</TableCell>
               <TableCell>Quantity</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
@@ -21,7 +24,10 @@ const ProductsTable = ({rows, selectedProducts, deleteProduct}) => {
               <TableRow key={row.productid}>
                 <TableCell>{row.productid}</TableCell>
                 <TableCell>{row.productname}</TableCell>
+                <TableCell>{row.brand}</TableCell>
                 <TableCell>{row.description}</TableCell>
+                <TableCell>{row.price}</TableCell>
+                <TableCell>{row.category}</TableCell>
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell>
                 <Button sx={{margin:'0px 10px'}} 
@@ -36,7 +42,8 @@ const ProductsTable = ({rows, selectedProducts, deleteProduct}) => {
                 <Button sx={{margin:'0px 10px'}} 
                 variant="contained" 
                 color="success"
-                onClick={() => selectedProducts({productid: row.productid, productname:row.productname, description:row.description, quantity:row.quantity})}
+                onClick={() => selectedProducts({productid: row.productid, productname:row.productname, brand:row.brand, 
+                  description:row.description, price:row.price, category:row.category, quantity:row.quantity})}
                 >Update
                 </Button>
 

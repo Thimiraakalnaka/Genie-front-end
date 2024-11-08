@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Modal, TextField, Button } from '@mui/material';
+import { Box, Typography, Modal} from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -7,19 +7,27 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
     
     const [formData, setFormData] = useState({
         productname: '',
+        brand:'',
         description: '',
+        price:'',
+        category:'',
         quantity: ''
       });
 
       useEffect(() => {
-        if(!submitted && !isEdit){
-            setFormData({
-                productname: '',
-                description: '',
-                quantity: ''
-              });
+        if(isEdit && data){
+            setFormData(data);
+        }else if(!isEdit && !submitted){
+          setFormData({
+            productname: '',
+            brand:'',
+            description: '',
+            price:'',
+            category:'',
+            quantity: ''
+            });
         }
-    }, [submitted, isEdit]);
+    }, [data, isEdit, submitted]);
 
 
     
@@ -31,7 +39,7 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
       const handleSubmit = (e) => {
         e.preventDefault();
         if(isEdit){
-            updateProduct(formData);
+            updateProduct({ ...formData, productid: data.productid });
         }else{
             addProduct(formData);
         }  
@@ -110,7 +118,12 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
   </div>
   <div className="col-md-6">
     <label for="brand" className="form-label">Brand</label>
-    <input type="text" className="form-control" id="brand"/>
+    <input type="text" 
+    className="form-control" 
+    id="brand"
+    name='brand'
+    value={formData.brand}
+    onChange={handleChange}/>
   </div>
   <div className="mb-3">
     <label for="description" className="form-label">Description</label>
@@ -125,7 +138,13 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
   </div>
   <div className="col-12">
     <label for="Price" className="form-label">Price</label>
-    <input type="text" className="form-control" id="Price" placeholder="Rs 0.00"/>
+    <input type="text" 
+    className="form-control" 
+    id="price" 
+    placeholder="Rs 0.00"
+    name='price'
+    value={formData.price}
+    onChange={handleChange}/>
   </div>
   <div className="col-md-6">
     <label for="formFile" className="form-label">Default file input example</label>
@@ -133,7 +152,7 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
   </div>
   <div className="col-md-4">
     <label for="category" className="form-label">Category</label>
-    <select id="category" className="form-select">
+    <select id="category" className="form-select" name='category' value={formData.category} onChange={handleChange}>
             <option value="">Select category</option>
             <option value="Laptop">Laptop</option>
             <option value="Headphone">Headphone</option>

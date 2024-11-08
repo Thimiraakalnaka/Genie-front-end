@@ -30,7 +30,10 @@ const Products = () => {
 
     const payload ={
         productname: data.productname,
+        brand:data.brand,
         description: data.description,
+        price:data.price,
+        category:data.category,
         quantity: data.quantity
     }
 
@@ -51,7 +54,10 @@ const Products = () => {
     const payload ={
       productid: data.productid,
       productname: data.productname,
+      brand:data.brand,
       description: data.description,
+      price:data.price,
+      category:data.category,
       quantity: data.quantity
     }
 
@@ -72,7 +78,10 @@ const Products = () => {
     const payload ={
       productid: data.productid,
       productname: data.productname,
+      brand:data.brand,
       description: data.description,
+      price:data.price,
+      category:data.category,
       quantity: data.quantity
     }
     
@@ -104,10 +113,10 @@ const Products = () => {
        
       </Typography>
     <ProductsTable rows={products}  
-    selectedProducts={data=>{
-      setSelectedProducts(data);
-      setIsEdit(true);
-      handleOpen();
+      selectedProducts={(data)=>{
+        setSelectedProducts(data);
+        setIsEdit(true);
+        handleOpen();
     }}
     
     deleteProduct={data => window.confirm('Are you sure?') && deleteProduct(data)}
