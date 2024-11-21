@@ -10,6 +10,7 @@ const ProductsTable = ({rows, selectedProducts, deleteProduct}) => {
           <TableHead>
             <TableRow>
               <TableCell>Product ID</TableCell>
+              <TableCell>Image</TableCell>
               <TableCell>Product Name</TableCell>
               <TableCell>Brand</TableCell>
               <TableCell>Description</TableCell>
@@ -23,6 +24,17 @@ const ProductsTable = ({rows, selectedProducts, deleteProduct}) => {
             {rows.map((row) => (
               <TableRow key={row.productid}>
                 <TableCell>{row.productid}</TableCell>
+                <TableCell>
+                  {row.imageUrl ? (
+                    <img
+                      src={row.imageUrl}
+                      alt={row.imageName}
+                      style={{ width: '75px', height: 'auto' }}
+                    />
+                  ) : (
+                    'No Image'
+                  )}
+                </TableCell>
                 <TableCell>{row.productname}</TableCell>
                 <TableCell>{row.brand}</TableCell>
                 <TableCell>{row.description}</TableCell>

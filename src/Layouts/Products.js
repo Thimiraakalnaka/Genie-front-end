@@ -10,43 +10,32 @@ const Products = () => {
     const [submitted, setSubmitted] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [selectedProducts, setSelectedProducts]= useState([]);
+   
   
   useEffect(() =>{
     getProducts();
   },[]);
 
-  const getProducts = () =>{
-    Axios.get('http://localhost:8080/api/v1/getproduct')
-    .then(response => {
-      setProducts(response.data);
-    })
-    .catch(error => {
-      console.error("Axios Error :", error);
-    });
-  }
-
-  const addProduct = (data) => {
-    setSubmitted(true);
-
-    const payload ={
-        productname: data.productname,
-        brand:data.brand,
-        description: data.description,
-        price:data.price,
-        category:data.category,
-        quantity: data.quantity
+  const getProducts = async () => {
+    try {
+      const response = await Axios.get('http://localhost:8080/api/v1/getproduct');
+      const productList = await Promise.all(
+        response.data.map(async (product) => {
+          if (product.imageName) {
+            const imageResponse = await Axios.get(
+              `http://localhost:8080/api/v1/product/${product.productid}/image`,
+              { responseType: 'blob' }
+            );
+            product.imageUrl = URL.createObjectURL(imageResponse.data);
+          }
+          return product;
+        })
+      );
+      setProducts(productList);
+    } catch (error) {
+      console.error('Axios Error:', error);
     }
-
-    Axios.post('http://localhost:8080/api/v1/addproduct', payload)
-    .then(() => {
-      getProducts();
-      setSubmitted(false);
-      handleClose();
-    })
-    .catch(error => {
-      console.error("Axios Error :", error);
-    });
-  }
+  };
 
   const updateProduct = (data) => {
     setSubmitted(true);
@@ -125,11 +114,12 @@ const Products = () => {
     <ProductForm 
     open={open} 
     handleClose={handleClose} 
-    addProduct={addProduct} 
+    // addProduct={addProduct} 
     submitted={submitted} 
     data={selectedProducts} 
     isEdit={isEdit}
     updateProduct={updateProduct}
+    getProducts={getProducts}
     />
     </div>
   )

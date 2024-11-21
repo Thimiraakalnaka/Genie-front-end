@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Modal} from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Axios from 'axios';
 
 
-const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, updateProduct }) => {
+const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, updateProduct, getProducts }) => {
     
     const [formData, setFormData] = useState({
         productname: '',
@@ -29,22 +30,65 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
         }
     }, [data, isEdit, submitted]);
 
-
+    const [image, setImage] = useState(null);
     
       const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
       };
-    
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        if(isEdit){
-            updateProduct({ ...formData, productid: data.productid });
-        }else{
-            addProduct(formData);
-        }  
-        
+
+      const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+        // setProduct({...product, image: e.target.files[0]})
       };
+    
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        const reader = new FileReader();
+    
+        reader.onload = () => {
+            const productData = {
+                ...formData,
+                imageName: image.name,
+                imageType: image.type,
+                imageDate: reader.result.split(",")[1], 
+            };
+    
+        if (isEdit) {
+          Axios.put("http://localhost:8080/api/v1/updateproduct", productData, {
+              headers: {
+                  "Content-Type": "application/json",
+              },
+          })
+          .then((response) => {
+              console.log("Product updated successfully:", response.data);
+              handleClose();
+              getProducts(); 
+          })
+          .catch((error) => {
+              console.error("Error updating product:", error);
+          });
+      } else {
+          Axios.post("http://localhost:8080/api/v1/addproduct", productData, {
+              headers: {
+                  "Content-Type": "application/json",
+              },
+          })
+          .then((response) => {
+              console.log("Product added successfully:", response.data);
+              handleClose();
+              getProducts(); 
+          })
+          .catch((error) => {
+              console.error("Error adding product:", error);
+          });
+      }
+        };
+    
+        if (image) reader.readAsDataURL(image);
+        else console.error("No image selected.");
+    };
+    
   return (
     <div>
          <Modal
@@ -77,33 +121,6 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
           }
         </Typography>
         
-        {/* 
-        <TextField
-          label="Product Name"
-          name="productname"
-          value={formData.productname}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          label="Description"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          label="Quantity"
-          name="quantity"
-          value={formData.quantity}
-          onChange={handleChange}
-          fullWidth
-        />
-        <Button variant="contained" type="submit">
-          {
-            isEdit ? 'Update' : 'Add'
-          }
-        </Button> */}
 
 
   <div className="col-md-6">
@@ -148,7 +165,7 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
   </div>
   <div className="col-md-6">
     <label for="formFile" className="form-label">Default file input example</label>
-    <input className="form-control" type="file" id="formFile"/>
+    <input className="form-control" type="file" id="formFile" onChange={handleImageChange}/>
   </div>
   <div className="col-md-4">
     <label for="category" className="form-label">Category</label>
@@ -172,14 +189,7 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
     onChange={handleChange}
     />
   </div>
-  {/* <div className="col-12">
-    <div className="form-check">
-      <input className="form-check-input" type="checkbox" id="gridCheck"/>
-      <label className="form-check-label" for="gridCheck">
-        Available
-      </label>
-    </div>
-  </div> */}
+
   <div className="col-12">
     <button type="submit" className="btn btn-primary">
           {
