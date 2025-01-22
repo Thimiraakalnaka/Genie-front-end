@@ -4,10 +4,12 @@ import GroupIcon from '@mui/icons-material/Group';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import CategoryIcon from '@mui/icons-material/Category';
 import SellIcon from '@mui/icons-material/Sell';
+import HomeIcon from '@mui/icons-material/Home';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Users from '../Layouts/Users'; 
 import Orders from '../Layouts/Orders';
 import Products from '../Layouts/Products';
+import Home from '../Layouts/Home';
 
 
 const demoTheme = createTheme({
@@ -27,6 +29,7 @@ const demoTheme = createTheme({
 
 
 const NAVIGATION = [
+  { title: 'Home', icon: <HomeIcon />, component: <Home/> },
   { title: 'Users', icon: <GroupIcon />, component: <Users /> },
   { title: 'Orders', icon: <InventoryIcon />, component: <Orders /> },
   { title: 'Product', icon: <SellIcon />, component: <Products /> },
@@ -36,7 +39,7 @@ const NAVIGATION = [
 const drawerWidth = 240;
 
 export default function Dashboard() {
-  const [selectedComponent, setSelectedComponent] = useState(<Typography>Welcome to the admin dashboard!</Typography>);
+  const [selectedComponent, setSelectedComponent] = useState(<Home/>);
 
   return (
     <ThemeProvider theme={demoTheme}>
