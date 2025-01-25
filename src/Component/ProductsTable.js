@@ -42,7 +42,7 @@ const ProductsTable = ({rows, selectedProducts, deleteProduct}) => {
                 <TableCell>{row.category}</TableCell>
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell>
-                <Button sx={{margin:'0px 10px'}} 
+                <Button sx={{margin:'0px 10px',width:'auto'}} 
                 variant="outlined" 
                 startIcon={<DeleteIcon />} 
                 color='error'
@@ -51,7 +51,7 @@ const ProductsTable = ({rows, selectedProducts, deleteProduct}) => {
                     Delete
                     </Button>
 
-                <Button sx={{margin:'0px 10px'}} 
+                <Button sx={{margin:'0px 10px',width:'auto'}} 
                 variant="contained" 
                 color="success"
                 onClick={() => selectedProducts({productid: row.productid, productname:row.productname, brand:row.brand, 

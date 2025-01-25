@@ -4,6 +4,7 @@ import {Button, Typography } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ProductForm from '../Component/ProductForm';
 import ProductsTable from '../Component/ProductsTable';
+import axiosInstance from '../axiosConfig';
 
 const Products = () => {
     const [products, setProducts]= useState([]);
@@ -18,11 +19,11 @@ const Products = () => {
 
   const getProducts = async () => {
     try {
-      const response = await Axios.get('http://localhost:8080/api/v1/getproduct');
+      const response = await axiosInstance.get('http://localhost:8080/api/v1/getproduct');
       const productList = await Promise.all(
         response.data.map(async (product) => {
           if (product.imageName) {
-            const imageResponse = await Axios.get(
+            const imageResponse = await axiosInstance.get(
               `http://localhost:8080/api/v1/product/${product.productid}/image`,
               { responseType: 'blob' }
             );
@@ -50,7 +51,7 @@ const Products = () => {
       quantity: data.quantity
     }
 
-    Axios.put('http://localhost:8080/api/v1/updateproduct', payload)
+    axiosInstance.put('http://localhost:8080/api/v1/updateproduct', payload)
     .then(() => {
       getProducts();
       setSubmitted(false);
@@ -74,7 +75,7 @@ const Products = () => {
       quantity: data.quantity
     }
     
-    Axios.delete('http://localhost:8080/api/v1/deleteproduct', {data:payload})
+    axiosInstance.delete('http://localhost:8080/api/v1/deleteproduct', {data:payload})
     .then(() => {
       getProducts();
     })
@@ -98,7 +99,7 @@ const Products = () => {
     <div>
         <Typography variant="h4" gutterBottom>
         Products
-        <Button sx={{float:'right'}} variant="contained" endIcon={<AddCircleOutlineIcon />} onClick={handleOpen}> Add Product</Button>
+        <Button sx={{float:'right',width:'auto'}} variant="contained" endIcon={<AddCircleOutlineIcon />} onClick={handleOpen}> Add Product</Button>
        
       </Typography>
     <ProductsTable rows={products}  

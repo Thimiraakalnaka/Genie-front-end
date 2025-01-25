@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Box, CssBaseline, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { AppBar, Toolbar, Typography, Box, CssBaseline, Drawer, List, ListItem, ListItemIcon, ListItemText, Button } from '@mui/material';
 import GroupIcon from '@mui/icons-material/Group';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -10,6 +10,9 @@ import Users from '../Layouts/Users';
 import Orders from '../Layouts/Orders';
 import Products from '../Layouts/Products';
 import Home from '../Layouts/Home';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../Component/AuthContext';
 
 
 const demoTheme = createTheme({
@@ -41,6 +44,16 @@ const drawerWidth = 240;
 export default function Dashboard() {
   const [selectedComponent, setSelectedComponent] = useState(<Home/>);
 
+  const {logout} = useAuth();
+
+  const navigate = useNavigate()
+
+  
+  const logoutbtn = () => {
+    logout();
+    navigate('/');
+  }
+
   return (
     <ThemeProvider theme={demoTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -48,10 +61,11 @@ export default function Dashboard() {
         
         
         <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-          <Toolbar>
+          <Toolbar sx={{ justifyContent: 'space-between' }}>
             <Typography variant="h6" noWrap component="div">
               Admin Dashboard
             </Typography>
+            <Button variant="contained" sx={{width:'auto'}} onClick={logoutbtn}><LogoutIcon/> Logout</Button>
           </Toolbar>
         </AppBar>
 

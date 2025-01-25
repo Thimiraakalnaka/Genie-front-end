@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import UsersTable from '../Component/UsersTable';
-import Axios from 'axios';
+// import Axios from 'axios';
 import {Button, Typography } from '@mui/material';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import UserForm from '../Component/UserForm';
+import axiosInstance from '../axiosConfig';
 
 
 export default function Users() {
@@ -17,7 +18,7 @@ export default function Users() {
   },[]);
 
   const getUsers = () =>{
-    Axios.get('http://localhost:8080/api/v1/getusers')
+    axiosInstance.get('http://localhost:8080/api/v1/getusers')
     .then(response => {
       setUsers(response.data);
     })
@@ -37,7 +38,7 @@ export default function Users() {
       password: data.password
     }
 
-    Axios.post('http://localhost:8080/api/v1/adduser', payload)
+    axiosInstance.post('http://localhost:8080/api/v1/register', payload)
     .then(() => {
       getUsers();
       setSubmitted(false);
@@ -59,7 +60,7 @@ export default function Users() {
       password: data.password
     }
 
-    Axios.put('http://localhost:8080/api/v1/updateuser', payload)
+    axiosInstance.put('http://localhost:8080/api/v1/updateuser', payload)
     .then(() => {
       getUsers();
       setSubmitted(false);
@@ -81,7 +82,7 @@ export default function Users() {
       password: data.password
     }
     
-    Axios.delete('http://localhost:8080/api/v1/deleteuser', {data:payload})
+    axiosInstance.delete('http://localhost:8080/api/v1/deleteuser', {data:payload})
     .then(() => {
       getUsers();
     })
@@ -104,7 +105,7 @@ export default function Users() {
     <div>
       <Typography variant="h4" gutterBottom>
         Users
-        <Button sx={{float:'right'}} variant="contained" endIcon={<PersonAddAltIcon />} onClick={handleOpen}> Add users</Button>
+        <Button sx={{float:'right',width:'auto'}} variant="contained" endIcon={<PersonAddAltIcon />} onClick={handleOpen}> Add users</Button>
        
       </Typography>
     <UsersTable rows={users}  

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Modal} from '@mui/material';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Axios from 'axios';
+import axiosInstance from '../axiosConfig';
 
 
 const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, updateProduct, getProducts }) => {
@@ -55,7 +56,7 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
             };
     
         if (isEdit) {
-          Axios.put("http://localhost:8080/api/v1/updateproduct", productData, {
+          axiosInstance.put("http://localhost:8080/api/v1/updateproduct", productData, {
               headers: {
                   "Content-Type": "application/json",
               },
@@ -69,7 +70,7 @@ const ProductForm = ({ addProduct, open, handleClose, submitted, data, isEdit, u
               console.error("Error updating product:", error);
           });
       } else {
-          Axios.post("http://localhost:8080/api/v1/addproduct", productData, {
+          axiosInstance.post("http://localhost:8080/api/v1/addproduct", productData, {
               headers: {
                   "Content-Type": "application/json",
               },

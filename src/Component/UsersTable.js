@@ -27,7 +27,7 @@ const UsersTable = ({rows, selectedUser, deleteUser}) => {
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.password}</TableCell>
                 <TableCell>
-                <Button sx={{margin:'0px 10px'}} 
+                <Button sx={{margin:'0px 10px',width:'auto'}} 
                 variant="outlined" 
                 startIcon={<DeleteIcon />} 
                 color='error'
@@ -36,7 +36,7 @@ const UsersTable = ({rows, selectedUser, deleteUser}) => {
                     Delete
                     </Button>
 
-                <Button sx={{margin:'0px 10px'}} 
+                <Button sx={{margin:'0px 10px',width:'auto'}} 
                 variant="contained" 
                 color="success"
                 onClick={() => selectedUser({id: row.id, firstname:row.firstname, lastname:row.lastname, email:row.email, password:row.password})}
